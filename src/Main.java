@@ -1,17 +1,22 @@
+import taskmanagement.task.Epic;
+import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
+import taskmanagement.task.TaskStatus;
+import taskmanagement.taskmanager.TaskManager;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = new TaskManager();
+// Создаем задачи, эпики и подзадачи
+        Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW, "Задача");
+        Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS, "Задача");
 
-        // Создаем задачи, эпики и подзадачи
-        Task task1 = new Task(1, "Задача 1", "Описание задачи 1", TaskStatus.NEW);
-        Task task2 = new Task(2, "Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS);
+        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.NEW, "Эпик");
+        epic1.addSubtask(new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId(), "Подзадача"));
+        epic1.addSubtask(new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId(), "Подзадача"));
 
-        Epic epic1 = new Epic(3, "Эпик 1", "Описание эпика 1", TaskStatus.NEW);
-        epic1.addSubtask(new Subtask(4, "Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId()));
-        epic1.addSubtask(new Subtask(5, "Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId()));
-
-        Epic epic2 = new Epic(6, "Эпик 2", "Описание эпика 2", TaskStatus.DONE);
-        epic2.addSubtask(new Subtask(7, "Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic2.getId()));
+        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", TaskStatus.DONE, "Эпик");
+        epic2.addSubtask(new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic2.getId(), "Подзадача"));
 
         // Добавляем задачи в менеджер
         taskManager.createTask(task1);
@@ -26,8 +31,8 @@ public class Main {
         }
 
         // Изменяем статусы задач
-        task1 = new Task(1, "Задача 1", "Описание задачи 1", TaskStatus.IN_PROGRESS);
-        epic1.addSubtask(new Subtask(4, "Подзадача 1", "Описание подзадачи 1", TaskStatus.DONE, epic1.getId()));
+        task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.IN_PROGRESS, "Задача");
+        epic1.addSubtask(new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.DONE, epic1.getId(), "Подзадача"));
 
         taskManager.updateTask(task1);
         taskManager.updateTask(epic1);
@@ -40,6 +45,9 @@ public class Main {
 
         // Удаляем задачу и эпик
         taskManager.deleteTaskById(2);
+        for (Epic epic : taskManager.getAllEpics()) {
+            taskManager.updateEpicStatus(epic);
+        }
         taskManager.deleteTaskById(3);
 
         // Выводим окончательные списки задач
@@ -61,7 +69,7 @@ public class Main {
 
         System.out.println("\nСписок подзадач:");
         for (Task task : taskManager.getAllTasks()) {
-            if (task instanceof Subtask) {
+            if (task.getClass().equals(Subtask.class)) {
                 System.out.println(task);
             }
         }

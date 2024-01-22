@@ -1,17 +1,27 @@
+package taskmanagement.task;
+
 import java.util.Objects;
-enum TaskStatus {
-    NEW,
-    IN_PROGRESS,
-    DONE
-}
 
 public class Task {
-
     private int id;
     private String title;
     private String description;
-
     private TaskStatus status;
+    private String type;
+    public Task(String title, String description, TaskStatus status, String type) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.type = type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 
     public int getId() {
         return id;
@@ -24,19 +34,23 @@ public class Task {
     public String getDescription() {
         return description;
     }
+
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
     public TaskStatus getStatus() {
         return status;
     }
 
-    public Task(int id, String title, String description, TaskStatus status) {
-        this.id = id;
+    public void setTitle(String title) {
         this.title = title;
-        this.description = description;
-        this.status = status;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -46,12 +60,16 @@ public class Task {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Task task = (Task) obj;
-        return id == task.id;
+        return id == task.id &&
+                Objects.equals(title, task.title) &&
+                Objects.equals(description, task.description) &&
+                status == task.status &&
+                Objects.equals(type, task.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, title, description, status, type);
     }
 
     @Override

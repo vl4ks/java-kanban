@@ -1,7 +1,17 @@
 
-0
-java:S1220""Move this file to a named package.
-]
-java:S1117W";Rename "subtasks" which hides the field declared at line 8.(Žß»Åüÿÿÿÿ8î”³ÝÑ1
-R
-java:S1144V"5Remove this unused private "updateEpicStatus" method.( œ¿ÿ8ò”³ÝÑ1
+7
+java:S1220""Move this file to a named package.8°ÐÏŒÒ1
+x
+java:S2159S"VRemove this call to "equals"; comparisons between unrelated types always return false.(÷Õ×Áýÿÿÿÿ8ÏÐÏŒÒ1
+s
+java:S2159U"VRemove this call to "equals"; comparisons between unrelated types always return false.(û›î¦8ÏÐÏŒÒ1
+o
+java:S3776]"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ÒÄÁŒ8¬ ÏŒÒ1
+x
+java:S2159a"VRemove this call to "equals"; comparisons between unrelated types always return false.(÷Õ×Áýÿÿÿÿ8ßÐÏŒÒ1
+s
+java:S2159i"VRemove this call to "equals"; comparisons between unrelated types always return false.(û›î¦8ßÐÏŒÒ1
+i
+java:S2175|"MA "HashMap<Integer, Subtask>" cannot contain a "Subtask" in a "Integer" type.(¯÷‰:8ßÐÏŒÒ1
+k
+java:S2175ˆ"MA "HashMap<Integer, Subtask>" cannot contain a "Subtask" in a "Integer" type.(ëšÁï8ßÐÏŒÒ1
