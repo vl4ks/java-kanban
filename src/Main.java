@@ -1,54 +1,53 @@
-import taskmanagement.task.Epic;
-import taskmanagement.task.Subtask;
-import taskmanagement.task.Task;
-import taskmanagement.task.TaskStatus;
+import taskmanagement.task.*;
 import taskmanagement.taskmanager.TaskManager;
 
 public class Main {
     public static void main(String[] args) {
+
         TaskManager taskManager = new TaskManager();
-// Создаем задачи, эпики и подзадачи
-        Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW, "Задача");
-        Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS, "Задача");
+        // Создаем задачи, эпики и подзадачи
+        Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW, TaskType.TASK);
+        Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS, TaskType.TASK);
 
-        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.NEW, "Эпик");
-        epic1.addSubtask(new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId(), "Подзадача"));
-        epic1.addSubtask(new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId(), "Подзадача"));
+        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.NEW, TaskType.EPIC);
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId(), TaskType.SUBTASK);
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId(), TaskType.SUBTASK);
+        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", TaskStatus.DONE, TaskType.EPIC);
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic2.getId(), TaskType.SUBTASK);
 
-        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", TaskStatus.DONE, "Эпик");
-        epic2.addSubtask(new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic2.getId(), "Подзадача"));
+        epic1.addSubtask(subtask1.getId());
+        epic1.addSubtask(subtask2.getId());
+        epic2.addSubtask(subtask3.getId());
 
-        // Добавляем задачи в менеджер
         taskManager.createTask(task1);
         taskManager.createTask(task2);
         taskManager.createTask(epic1);
         taskManager.createTask(epic2);
 
-        // Выводим списки задач
         System.out.println("Список задач:");
         for (Task task : taskManager.getAllTasks()) {
             System.out.println(task.getId() + ": " + task.getTitle() + " - " + task.getStatus());
         }
 
-        // Изменяем статусы задач
-        task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.IN_PROGRESS, "Задача");
-        epic1.addSubtask(new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.DONE, epic1.getId(), "Подзадача"));
+        task1.setStatus(TaskStatus.DONE);
+        subtask1.setStatus(TaskStatus.DONE);
+        epic1.setStatus(TaskStatus.IN_PROGRESS);
+        epic2.setStatus(TaskStatus.DONE);
 
+        // Обновляем задачи, подзадачи и эпики
         taskManager.updateTask(task1);
+        taskManager.updateTask(subtask1);
         taskManager.updateTask(epic1);
+        taskManager.updateTask(epic2);
 
         // Выводим обновленные списки задач
         System.out.println("\nОбновленный список задач:");
         for (Task task : taskManager.getAllTasks()) {
             System.out.println(task.getId() + ": " + task.getTitle() + " - " + task.getStatus());
         }
-
         // Удаляем задачу и эпик
-        taskManager.deleteTaskById(2);
-        for (Epic epic : taskManager.getAllEpics()) {
-            taskManager.updateEpicStatus(epic);
-        }
-        taskManager.deleteTaskById(3);
+        taskManager.deleteTaskById(task1.getId());
+        taskManager.deleteTaskById(epic1.getId());
 
         // Выводим окончательные списки задач
         System.out.println("\nОкончательный список задач:");
@@ -68,7 +67,7 @@ public class Main {
         }
 
         System.out.println("\nСписок подзадач:");
-        for (Task task : taskManager.getAllTasks()) {
+        for (Task task : taskManager.getAllSubtasks()) {
             if (task.getClass().equals(Subtask.class)) {
                 System.out.println(task);
             }

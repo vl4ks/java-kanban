@@ -7,20 +7,17 @@ public class Task {
     private String title;
     private String description;
     private TaskStatus status;
-    private String type;
-    public Task(String title, String description, TaskStatus status, String type) {
+    private TaskType type;
+
+    public Task(String title, String description, TaskStatus status, TaskType type) {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.type = type;
+        this.type = TaskType.TASK;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
+    public TaskType getType() {
+        return TaskType.TASK;
     }
 
     public int getId() {

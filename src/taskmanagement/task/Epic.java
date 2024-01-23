@@ -5,41 +5,33 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private List<Subtask> subtasks; // список подзадач в эпике
-    private String type;
-    public Epic(String title, String description, TaskStatus status, String type) {
+    private List<Integer> subtasks; // список подзадач в эпике
+
+    public Epic(String title, String description, TaskStatus status, TaskType type) {
         super(title, description, status, type);
-        this.subtasks = new ArrayList<>();
+        this.subtasks = new ArrayList<Integer>();
     }
 
-    public List<Subtask> getSubtasks() {
+    public List<Integer> getSubtasks() {
         return subtasks;
     }
 
-    public void addSubtask(Subtask subtask) {
-        subtasks.add(subtask);
+    public void addSubtask(int subtaskId) {
+        subtasks.add(subtaskId);
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(subtasks, epic.subtasks) &&
-                Objects.equals(type, epic.type);
+        return Objects.equals(subtasks, epic.subtasks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subtasks, type);
+        return Objects.hash(super.hashCode(), subtasks);
     }
 
     @Override
@@ -50,8 +42,7 @@ public class Epic extends Task {
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
                 ", subtasks=" + subtasks +
-                ", type=" + type +
+                ", type=" + getType() +
                 '}';
     }
 }
-

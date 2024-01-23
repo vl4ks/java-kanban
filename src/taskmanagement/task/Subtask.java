@@ -3,23 +3,15 @@ package taskmanagement.task;
 import java.util.Objects;
 
 public class Subtask extends Task {
-    private int epicId; //id эпика, к которому принадлежит подзадача
-    private String type;
-    public Subtask(String title, String description, TaskStatus status, int epicId, String type) {
+    private int epicId; //Идентификатор эпика, к которому принадлежит подзадача
+
+    public Subtask(String title, String description, TaskStatus status, int epicId, TaskType type) {
         super(title, description, status, type);
         this.epicId = epicId;
     }
 
     public int getEpicId() {
         return epicId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @Override
@@ -44,7 +36,7 @@ public class Subtask extends Task {
                 ", description='" + getDescription() + '\'' +
                 ", status=" + getStatus() +
                 ", epicId=" + epicId +
-                ", type=" + type +
+                ", type=" + getType() +
                 '}';
     }
 }

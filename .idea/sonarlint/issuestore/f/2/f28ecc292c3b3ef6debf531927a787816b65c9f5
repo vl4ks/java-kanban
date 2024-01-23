@@ -1,3 +1,5 @@
 
-o
-java:S3776`"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ÒÄÁŒ8À¸÷‚Ó1
+`
+java:S1854„"=Remove this useless assignment to local variable "subTaskId".(õÛù…úÿÿÿÿ8ÆŠ½­Ó1
+Q
+java:S1481„".Remove this unused "subTaskId" local variable.(õÛù…úÿÿÿÿ8ÆŠ½­Ó1
