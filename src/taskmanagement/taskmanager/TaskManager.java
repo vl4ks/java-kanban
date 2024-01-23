@@ -42,12 +42,12 @@ public class TaskManager {
 
     // удаление всех подзадач
     public void removeAllSubtasks() {
+        subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.getSubtasks().clear();
             epic.setStatus(TaskStatus.NEW);
         }
     }
-
 
     //создание задачи (или эпика, или подзадачи)
     public void createTask(Task task) {
@@ -94,11 +94,11 @@ public class TaskManager {
     }
 
     public void updateTask(Task task) {
-        if (task != null && tasks.containsKey(task.getId())) {
+        if (task != null) {
             tasks.put(task.getId(), task);
-            if (TaskType.SUBTASK.equals(task.getType())) {
+            if (task.getType() == TaskType.SUBTASK) {
                 subtasks.put(task.getId(), (Subtask) task);
-            } else if (TaskType.EPIC.equals(task.getType())) {
+            } else if (task.getType() == TaskType.EPIC) {
                 epics.put(task.getId(), (Epic) task);
                 updateEpicStatus((Epic) task);
             }
