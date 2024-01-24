@@ -1,8 +1,6 @@
 import taskmanagement.task.*;
 import taskmanagement.taskmanager.TaskManager;
 
-import java.util.ArrayList;
-
 public class Main {
     public static void main(String[] args) {
 
@@ -11,20 +9,21 @@ public class Main {
         Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW);
         Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS);
 
-        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.NEW, new ArrayList<>());
+        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.NEW);
+        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", TaskStatus.DONE);
+
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
+
         Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId());
         Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId());
-        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", TaskStatus.DONE, new ArrayList<>());
         Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic2.getId());
 
-        epic1.addSubtask(subtask1.getId());
-        epic1.addSubtask(subtask2.getId());
-        epic2.addSubtask(subtask3.getId());
-
+        taskManager.createSubtask(subtask1);
+        taskManager.createSubtask(subtask2);
+        taskManager.createSubtask(subtask3);
         taskManager.createTask(task1);
         taskManager.createTask(task2);
-        taskManager.createTask(epic1);
-        taskManager.createTask(epic2);
 
         System.out.println("Список задач:");
         for (Task task : taskManager.getAllTasks()) {

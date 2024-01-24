@@ -1,14 +1,14 @@
 package taskmanagement.task;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private List<Integer> subtasks; // список подзадач в эпике
+    private List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
 
-    public Epic(String title, String description, TaskStatus status, List<Integer> subtasks) {
+    public Epic(String title, String description, TaskStatus status) {
         super(title, description, status);
-        this.subtasks = subtasks;
         this.type = TaskType.EPIC;
     }
 
