@@ -1,10 +1,17 @@
 import taskmanagement.task.*;
-import taskmanagement.taskmanager.TaskManager;
+import taskmanagement.taskmanager.InMemoryTaskManager;
+import taskmanagement.taskmanager.Managers;
+
 
 public class Main {
     public static void main(String[] args) {
 
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager(
+                Managers.getDefaultHistory(),
+                Managers.getDefaultHistory()
+        );
+
+
         // Создаем задачи, эпики и подзадачи
         Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW);
         Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS);
@@ -25,6 +32,12 @@ public class Main {
         taskManager.createTask(task1);
         taskManager.createTask(task2);
 
+        // Добавляем задачи в историю
+        taskManager.getTaskById(task1.getId());
+        taskManager.getTaskById(task2.getId());
+        taskManager.getTaskById(subtask1.getId());
+        taskManager.getTaskById(epic1.getId());
+
         System.out.println("Список задач:");
         for (Task task : taskManager.getAllTasks()) {
             System.out.println(task.getId() + ": " + task.getTitle() + " - " + task.getStatus());
@@ -34,6 +47,7 @@ public class Main {
         subtask1.setStatus(TaskStatus.DONE);
         epic1.setStatus(TaskStatus.IN_PROGRESS);
         epic2.setStatus(TaskStatus.DONE);
+
 
         // Обновляем задачи, подзадачи и эпики
         taskManager.updateTask(task1);
@@ -73,5 +87,10 @@ public class Main {
                 System.out.println(task);
             }
         }
+        System.out.println("История:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
     }
 }

@@ -52,22 +52,28 @@ public class Task {
         this.id = id;
     }
 
+    public Task shallowCopy() {
+        Task copy = new Task(this.title, this.description, this.status);
+        copy.setId(this.id); // Установка идентификатора в скопированном объекте
+        return copy;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Task task = (Task) obj;
-        return id == task.id &&
-                Objects.equals(title, task.title) &&
+        return Objects.equals(title, task.title) &&
                 Objects.equals(description, task.description) &&
-                status == task.status &&
-                Objects.equals(type, task.type);
+                status == task.status;
     }
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, status, type);
+        return Objects.hash(title, description, status);
     }
+
 
     @Override
     public String toString() {
@@ -77,5 +83,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public String getName() {
+        return null;
     }
 }
