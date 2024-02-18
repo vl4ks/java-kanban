@@ -1,30 +1,27 @@
 package taskmanagement.taskmanager;
 
 import taskmanagement.task.Task;
-import taskmanagement.task.TaskSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private List<TaskSnapshot> history = new ArrayList<>();
 
+    private static final int MAX_HISTORY_SIZE = 10;  // Максимальный размер истории
+
+    private List<Task> history = new ArrayList<>();
     private List<Task> lastViewed = new ArrayList<>();
 
     @Override
     public void add(Task task) {
         if (task != null) {
-            TaskSnapshot taskSnapshot = createSnapshot(task.shallowCopy());
-            history.add(taskSnapshot);
+            Task taskCopy = task.shallowCopy();
+            history.add(taskCopy);
         }
     }
 
-    private TaskSnapshot createSnapshot(Task task) {
-        return new TaskSnapshot(task.getId(), task.getTitle(), task.getDescription(), task.getStatus());
-    }
-
     @Override
-    public List<TaskSnapshot> getHistory() {
+    public List<Task> getHistory() {
         return new ArrayList<>(history);
     }
 
@@ -32,7 +29,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void addLastViewed(Task task) {
         if (task != null) {
             Task taskCopy = task.shallowCopy();
-            if (lastViewed.size() >= 10) {
+            if (lastViewed.size() >= MAX_HISTORY_SIZE) {
                 lastViewed.remove(0);
             }
             lastViewed.add(taskCopy);

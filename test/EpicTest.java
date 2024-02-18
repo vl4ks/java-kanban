@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.Test;
+
 import taskmanagement.task.Epic;
 import taskmanagement.task.Subtask;
 import taskmanagement.task.TaskStatus;
-import taskmanagement.taskmanager.TaskManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,10 +20,10 @@ class EpicTest {
 
     @Test
     void testAddSubtaskToEpicSelf() {
-        Epic epic = new Epic("Epic 1", "Epic Description 1", TaskStatus.IN_PROGRESS);
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.IN_PROGRESS);
         epic.setId(1);
 
-        Subtask subtask = new Subtask("Subtask 1", "Subtask Description 1", TaskStatus.NEW, 1);
+        Subtask subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, 1);
         subtask.setId(2);
         epic.addSubtask(subtask.getId());
 

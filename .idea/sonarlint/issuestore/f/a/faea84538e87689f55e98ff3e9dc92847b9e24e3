@@ -1,6 +1,5 @@
 
 @
-java:S5786
-"Remove this 'public' modifier.(ˆ¼ê²øÿÿÿÿ8­‘ÍµÚ1
+java:S5786"Remove this 'public' modifier.(ˆ¼ê²øÿÿÿÿ8­‘ÍµÚ1
 a
-java:S5845"?Change the assertion arguments to not compare dissimilar types.(‹ğÙşÿÿÿÿ8˜êìÚÚ1
+java:S5845"?Change the assertion arguments to not compare dissimilar types.(‹ğÙşÿÿÿÿ8˜êìÚÚ1

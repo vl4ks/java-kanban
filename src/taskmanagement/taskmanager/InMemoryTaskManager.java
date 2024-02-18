@@ -94,30 +94,24 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task); // Добавление в историю просмотров
-            updateLastViewedTasks(task); // Добавление в последние просмотренные задачи
-        }
+        historyManager.add(task); // Добавление в историю просмотров
+        updateLastViewedTasks(task); // Добавление в последние просмотренные задачи
         return task;
     }
 
     @Override
     public Task getSubtaskById(int id) {
         Task subtask = subtasks.get(id);
-        if (subtask != null) {
-            historyManager.add(subtask);
-            updateLastViewedTasks(subtask);
-        }
+        historyManager.add(subtask);
+        updateLastViewedTasks(subtask);
         return subtask;
     }
 
     @Override
     public Task getEpicById(int id) {
         Task epic = epics.get(id);
-        if (epic != null) {
-            historyManager.add(epic);
-            updateLastViewedTasks(epic);
-        }
+        historyManager.add(epic);
+        updateLastViewedTasks(epic);
         return epic;
     }
 
@@ -132,14 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
-        List<TaskSnapshot> historySnapshots = historyManager.getHistory();
-        List<Task> historyTasks = new ArrayList<>();
-
-        for (TaskSnapshot snapshot : historySnapshots) {
-            historyTasks.add(snapshot.restoreTask());
-        }
-
-        return historyTasks;
+        return historyManager.getHistory();
     }
 
 
@@ -182,7 +169,6 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) {
             for (Integer subtaskId : epic.getSubtasks()) {
                 Subtask subtask = subtasks.get(subtaskId);
-                int subTaskId = subtask.getId();
                 result.add(subtask);
             }
         }
