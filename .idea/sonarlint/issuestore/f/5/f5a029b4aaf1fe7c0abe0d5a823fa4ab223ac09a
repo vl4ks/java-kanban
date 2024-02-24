@@ -1,6 +1,5 @@
 
 ;
-java:S5786
-"Remove this 'public' modifier.(œÁùÕ8ä°ÿ¾Û1
+java:S5786"Remove this 'public' modifier.(œÁùÕ8ä°ÿ¾Û1
 :
-java:S5785"Use assertNotEquals instead.(õàÙ§8è°ÿ¾Û1
+java:S5785Š"Use assertNotEquals instead.(õàÙ§8è°ÿ¾Û1

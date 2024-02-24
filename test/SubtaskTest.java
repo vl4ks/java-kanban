@@ -32,7 +32,7 @@ public class SubtaskTest {
     }
 
     private void createSubtaskInManager(Subtask subtask) {
-        new InMemoryTaskManager(Managers.getDefaultHistory(), Managers.getDefaultHistory()).createSubtask(subtask);
+        new InMemoryTaskManager(Managers.getDefaultHistory()).createSubtask(subtask);
     }
 
 }

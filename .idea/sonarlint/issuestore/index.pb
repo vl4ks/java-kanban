@@ -38,5 +38,3 @@ T
 $test/InMemoryHistoryManagerTest.java,3\d\3d0ca2553be2803d13878a15dde1df8c5a3dc179
 Q
 !test/InMemoryTaskManagerTest.java,f\5\f5a029b4aaf1fe7c0abe0d5a823fa4ab223ac09a
-Y
-)src/taskmanagement/task/TaskSnapshot.java,3\c\3cfa9126adc02d5e9953498e784f2440b87a1ce0
