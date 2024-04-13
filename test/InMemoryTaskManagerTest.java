@@ -59,7 +59,8 @@ public class InMemoryTaskManagerTest {
     void testDeleteTask() {
         Task task = new Task("Задача", "Описание", TaskStatus.NEW);
         taskManager.createTask(task);
-
+        assertNotNull(task, "Задача после создания не должна быть null");
+        assertNotNull(task.getId(), "У задачи должен быть установлен ID");
         taskManager.deleteTaskById(task.getId());
 
         assertNull(taskManager.getTaskById(task.getId()), "Задача не удалена.");
@@ -134,7 +135,7 @@ public class InMemoryTaskManagerTest {
         assertNotNull(taskManager.getTaskById(1));
         assertNotNull(taskManager.getTaskById(2));
 
-        // Проверяем, что id не конфликтуют, используя equals
+        // Проверяем, что id не конфликтуют
         assertFalse(taskManager.getTaskById(1).equals(taskManager.getTaskById(2)));
     }
 

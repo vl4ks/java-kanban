@@ -1,0 +1,15 @@
+
+ƒ
+java:S1319
+"fThe type of "taskNodes" should be an interface such as "Map" rather than the implementation "HashMap".(á®Ã¦8ë‰ »í1
+‰
+java:S1319"lThe type of "linkTasks" should be an interface such as "Map" rather than the implementation "LinkedHashMap".(®ó›ª8ë‰ »í1
+r
+java:S1104
+"UMake taskNodes a static final constant or non-public and provide accessors if needed.(á®Ã¦8ë‰ »í1
+r
+java:S1104"UMake linkTasks a static final constant or non-public and provide accessors if needed.(®ó›ª8ë‰ »í1
+L
+java:S1444"/Make this "public static linkTasks" field final(®ó›ª8ë‰ »í1
+:
+java:S2386"Make this member "protected".(®ó›ª8ú‰ »í1

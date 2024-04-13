@@ -52,11 +52,11 @@ public class Task {
         this.id = id;
     }
 
-    public Task shallowCopy() {
-        Task copy = new Task(this.title, this.description, this.status);
-        copy.setId(this.id); // Установка идентификатора в скопированном объекте
-        return copy;
-    }
+//    public Task shallowCopy() {
+//        Task copy = new Task(this.title, this.description, this.status);
+//        copy.setId(this.id); // Установка идентификатора в скопированном объекте
+//        return copy;
+//    }
 
     @Override
     public boolean equals(Object obj) {
