@@ -30,11 +30,8 @@ public class Main {
 
         System.out.println("Запрос 1:");
         System.out.println(taskManager.getTaskById(task1.getId()));
-        historyManager.add(taskManager.getTaskById(task1.getId()));
         System.out.println(taskManager.getEpicById(epic1.getId()));
-        historyManager.add(taskManager.getEpicById(epic1.getId()));
         System.out.println(taskManager.getTaskById(task2.getId()));
-        historyManager.add(taskManager.getTaskById(task2.getId()));
 
         System.out.println("\nИстория после запроса 1:");
         for (Task task : historyManager.getHistory()) {
@@ -43,11 +40,8 @@ public class Main {
 
         System.out.println("\nЗапрос 2:");
         System.out.println(taskManager.getTaskById(task2.getId()));
-        historyManager.add(taskManager.getTaskById(task2.getId()));
         System.out.println(taskManager.getTaskById(task1.getId()));
-        historyManager.add(taskManager.getTaskById(task1.getId()));
         System.out.println(taskManager.getEpicById(epic1.getId()));
-        historyManager.add(taskManager.getEpicById(epic1.getId()));
 
         System.out.println("\nИстория после запроса 2:");
         for (Task task : historyManager.getHistory()) {

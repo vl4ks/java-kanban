@@ -3,91 +3,71 @@ import org.junit.jupiter.api.Test;
 
 import taskmanagement.task.Task;
 import taskmanagement.task.TaskStatus;
-import taskmanagement.taskmanager.InMemoryHistoryManager;
+import taskmanagement.taskmanager.*;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     private InMemoryHistoryManager historyManager;
+    private TaskManager taskManager;
 
     @BeforeEach
     void setUp() {
-        historyManager = new InMemoryHistoryManager();
+        taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
+
+            Task task1 = new Task("Задача", "Описание", TaskStatus.NEW);
+            Task task2 = new Task("Задача", "Описание", TaskStatus.NEW);
+            Task task3 = new Task("Задача", "Описание", TaskStatus.NEW);
+
+            taskManager.createTask(task1);
+            taskManager.createTask(task2);
+            taskManager.createTask(task3);
+            taskManager.getTaskById(1);
+            taskManager.getTaskById(2);
+            taskManager.getTaskById(3);
     }
 
     @Test
-    void testLinkLast() {
-        Task task1 = new Task("Задача", "Описание", TaskStatus.NEW);
-        Task task2 = new Task("Задача", "Описание", TaskStatus.IN_PROGRESS);
-
-        historyManager.linkLast(task1);
-        historyManager.linkLast(task2);
-
-        assertEquals(task1, historyManager.getTasks().get(0));
-        assertEquals(task2, historyManager.getTasks().get(1));
-
-    }
-
-    @Test
-    void testRemoveNode() {
-        Task task1 = new Task("Задача", "Описание", TaskStatus.NEW);
-        Task task2 = new Task("Задача", "Описание", TaskStatus.IN_PROGRESS);
-
-        task1.setId(1);
-        task2.setId(2);
-
-        historyManager.linkLast(task1);
-        historyManager.linkLast(task2);
-
-        historyManager.removeNode(historyManager.taskNodes.get(task1.getId()));
-        assertEquals(task2, historyManager.getTasks().get(0));
-        assertFalse(historyManager.getTasks().contains(task1));
-
-    }
-
-    @Test
-    void testAdd() {
-        Task task1 = new Task("Задача", "Описание", TaskStatus.NEW);
-        Task task2 = new Task("Задача", "Описание", TaskStatus.IN_PROGRESS);
-
-        task1.setId(1);
-        task2.setId(1);
-        historyManager.linkLast(task1);
-        historyManager.add(task2);
-        assertEquals(task2, historyManager.getTasks().get(0));
-    }
-
-    @Test
-    void testRemove() {
-        Task task = new Task("Задача", "Описание", TaskStatus.NEW);
-
-        task.setId(1);
-        historyManager.linkLast(task);
+    void testRemoveFirst() {
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
         historyManager.remove(1);
-        assertEquals(0, historyManager.getTasks().size());
-    }
+        List<Task> history = historyManager.getHistory();
+        for (Task h : history) {
+            System.out.println(h);
 
+        }
+        assertEquals(2, history.size());
+        assertEquals(2, history.get(0).getId());
+        assertEquals(3, history.get(1).getId());
+    }
     @Test
-    void testGetHistory() {
-        Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW);
-        Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS);
+    void testRemoveCentral() {
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        historyManager.remove(2);
+        List<Task> history = historyManager.getHistory();
 
-        task1.setId(1);
-        task2.setId(2);
-        historyManager.add(task1);
-        historyManager.add(task2);
+        for (Task h : history) {
+            System.out.println(h);
 
-        assertNotNull(historyManager.getHistory());
-        assertEquals(2, historyManager.getHistory().size());
-
-        assertNotSame(task1, task2);
-
-        assertEquals(task1.getTitle(), historyManager.getHistory().get(0).getTitle());
-        assertEquals(task1.getDescription(), historyManager.getHistory().get(0).getDescription());
-        assertEquals(task1.getStatus(), historyManager.getHistory().get(0).getStatus());
-
-        assertEquals(task2.getTitle(), historyManager.getHistory().get(1).getTitle());
-        assertEquals(task2.getDescription(), historyManager.getHistory().get(1).getDescription());
-        assertEquals(task2.getStatus(), historyManager.getHistory().get(1).getStatus());
+        }
+        assertEquals(2, history.size());
+        assertEquals(1, history.get(0).getId());
+        assertEquals(3, history.get(1).getId());
     }
+    @Test
+    void testRemoveLast() {
+        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        historyManager.remove(3);
+        List<Task> history = historyManager.getHistory();
+        for (Task h : history) {
+            System.out.println(h);
+
+        }
+        assertEquals(2, history.size());
+        assertEquals(1, history.get(0).getId());
+        assertEquals(2, history.get(1).getId());
+    }
+
 }
