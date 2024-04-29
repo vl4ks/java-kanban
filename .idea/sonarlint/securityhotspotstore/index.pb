@@ -38,3 +38,7 @@ T
 $test/InMemoryHistoryManagerTest.java,3\d\3d0ca2553be2803d13878a15dde1df8c5a3dc179
 Q
 !test/InMemoryTaskManagerTest.java,f\5\f5a029b4aaf1fe7c0abe0d5a823fa4ab223ac09a
+?
+java-kanban.iml,d\f\df5dcbbd3f931c7c23855ccec11732ab4c8544f2
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec

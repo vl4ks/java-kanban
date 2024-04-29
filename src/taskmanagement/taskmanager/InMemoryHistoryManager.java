@@ -5,8 +5,8 @@ import taskmanagement.task.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static Node head;
-    private static Node tail;
+    private Node head;
+    private Node tail;
     private HashMap<Integer, Node> taskNodes = new HashMap<>();
 
     private static class Node {
@@ -16,8 +16,6 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         Node(Task task) {
             this.task = task;
-            this.next = null;
-            this.previous = null;
         }
     }
 
@@ -54,25 +52,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        Node nodeToRemove = taskNodes.get(task.getId());
-        if (nodeToRemove != null) {
-            removeNode(nodeToRemove);
-        }
         linkLast(task);
     }
 
     @Override
     public void remove(int id) {
-        Node current = head;
-        while (current != null) {
-            if (current.task.getId() == id) {
-                removeNode(current);
-                break;
-            }
-            current = current.next;
-        }
-        getTasks();
-
+        removeNode(taskNodes.get(id));
     }
 
     private List<Task> getTasks() {

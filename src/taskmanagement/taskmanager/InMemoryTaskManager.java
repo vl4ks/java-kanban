@@ -30,12 +30,13 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllEpics() {
         for (Epic epic : epics.values()) {
             List<Integer> relatedSubtasks = epic.getSubtasks();
-            for (Integer subtask : relatedSubtasks) {
-                subtasks.remove(subtask);
+            for (Integer subtaskId : relatedSubtasks) {
+                subtasks.remove(subtaskId);
+                historyManager.remove(subtaskId);
             }
+            historyManager.remove(epic.getId());
         }
         epics.clear();
-        getHistory().remove(epics);
     }
 
     //получение списка всех подзадач
@@ -47,12 +48,14 @@ public class InMemoryTaskManager implements TaskManager {
     // удаление всех подзадач
     @Override
     public void removeAllSubtasks() {
+        for (Subtask subtask : subtasks.values()) {
+            historyManager.remove(subtask.getId());
+        }
         subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.getSubtasks().clear();
             epic.setStatus(TaskStatus.NEW);
         }
-        getHistory().remove(subtasks);
     }
 
     //создание задачи (или эпика, или подзадачи)
@@ -88,8 +91,10 @@ public class InMemoryTaskManager implements TaskManager {
     // удаление всех задач
     @Override
     public void removeAllTasks() {
+        for (Task task : tasks.values()) {
+            historyManager.remove(task.getId());
+        }
         tasks.clear();
-        getHistory().remove(tasks);
     }
 
 
