@@ -42,3 +42,13 @@ Q
 java-kanban.iml,d\f\df5dcbbd3f931c7c23855ccec11732ab4c8544f2
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+i
+9src/taskmanagement/taskmanager/FileBackedTaskManager.java,a\e\ae192bdd5704cafe5d5a700315fd34a2f6b4fbaa
+h
+8src/taskmanagement/taskmanager/ManagerSaveException.java,8\b\8b2f39ceb852d8ea23d8760ecc4fba012b40d61b
+S
+#test/FileBackedTaskManagerTest.java,7\b\7bfffd275411fe1021207396a4af2f0a5d15b27f
+E
+task_manager_data.csv,0\a\0aa568a4496a0d03e1dcdc7981d413a1313f8ef3
+9
+	tasks.csv,c\a\ca3f0cf937a9ff065df723d0aeced5355330a301

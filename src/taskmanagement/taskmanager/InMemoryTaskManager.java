@@ -4,11 +4,10 @@ import taskmanagement.task.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
+    protected HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private HistoryManager historyManager; // История просмотров через HistoryManager
@@ -183,7 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
         return result;
     }
 
-    private void updateEpicStatus(Epic epic) {
+    protected void updateEpicStatus(Epic epic) {
         if (epic != null) {
             List<Integer> subtasksIds = epic.getSubtasks();
             boolean allSubtasksNew = true;
