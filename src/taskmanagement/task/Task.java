@@ -16,6 +16,14 @@ public class Task {
         this.type = TaskType.TASK;
     }
 
+    public Task(int id, String title, String description, TaskStatus status) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.type = TaskType.TASK;
+    }
+
     public TaskType getType() {
         return type;
     }
@@ -50,12 +58,6 @@ public class Task {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Task shallowCopy() {
-        Task copy = new Task(this.title, this.description, this.status);
-        copy.setId(this.id); // Установка идентификатора в скопированном объекте
-        return copy;
     }
 
     @Override

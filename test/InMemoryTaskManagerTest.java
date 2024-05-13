@@ -1,12 +1,17 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.mockito.Mockito.*;
+
 import taskmanagement.task.*;
 import taskmanagement.taskmanager.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+
 
 public class InMemoryTaskManagerTest {
     private TaskManager taskManager;
@@ -14,6 +19,38 @@ public class InMemoryTaskManagerTest {
     @BeforeEach
     void setUp() {
         taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
+    }
+
+    @Test
+    void testCreateTasksAndRemove() {
+        InMemoryHistoryManager historyManager = mock(InMemoryHistoryManager.class);
+        InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
+
+        Task task1 = new Task("Задача1", "Описание", TaskStatus.NEW);
+        Task task2 = new Task("Задача2", "Описание", TaskStatus.NEW);
+        Task task3 = new Task("Задача3", "Описание", TaskStatus.NEW);
+
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
+        taskManager.createTask(task3);
+        taskManager.getTaskById(1);
+        taskManager.getTaskById(2);
+        taskManager.getTaskById(3);
+
+        when(historyManager.getHistory()).thenReturn(Arrays.asList(task1, task2, task3));
+
+        taskManager.deleteTaskById(1);
+
+        verify(historyManager).remove(task1.getId());
+
+        taskManager.deleteTaskById(2);
+
+        verify(historyManager).remove(task2.getId());
+
+        taskManager.deleteTaskById(3);
+
+        verify(historyManager).remove(task3.getId());
+
     }
 
     @Test
@@ -59,7 +96,8 @@ public class InMemoryTaskManagerTest {
     void testDeleteTask() {
         Task task = new Task("Задача", "Описание", TaskStatus.NEW);
         taskManager.createTask(task);
-
+        assertNotNull(task, "Задача после создания не должна быть null");
+        assertNotNull(task.getId(), "У задачи должен быть установлен ID");
         taskManager.deleteTaskById(task.getId());
 
         assertNull(taskManager.getTaskById(task.getId()), "Задача не удалена.");
@@ -134,7 +172,7 @@ public class InMemoryTaskManagerTest {
         assertNotNull(taskManager.getTaskById(1));
         assertNotNull(taskManager.getTaskById(2));
 
-        // Проверяем, что id не конфликтуют, используя equals
+        // Проверяем, что id не конфликтуют
         assertFalse(taskManager.getTaskById(1).equals(taskManager.getTaskById(2)));
     }
 
