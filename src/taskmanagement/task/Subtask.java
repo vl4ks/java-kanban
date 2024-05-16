@@ -6,15 +6,17 @@ public class Subtask extends Task {
     private int epicId; //Идентификатор эпика, к которому принадлежит подзадача
 
     public Subtask(String title, String description, TaskStatus status, int epicId) {
-        super(title, description, status);
+        this(0, title, description, status, epicId);
         this.epicId = epicId;
-        this.type = TaskType.SUBTASK;
     }
 
     public Subtask(int id, String title, String description, TaskStatus status, int epicId) {
         super(id, title, description, status);
-        this.epicId = epicId;
-        this.type = TaskType.SUBTASK;
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.SUBTASK;
     }
 
     public int getEpicId() {

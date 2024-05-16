@@ -4,13 +4,12 @@ import taskmanagement.task.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected HashMap<Integer, Task> tasks = new HashMap<>();
+    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    protected HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private HistoryManager historyManager; // История просмотров через HistoryManager
     private int idCounter;  // счетчик для генерации id
 
@@ -97,7 +96,6 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.clear();
     }
 
-
     //получение задачи, подзадачи и эпика по id
     @Override
     public Task getTaskById(int id) {
@@ -122,12 +120,10 @@ public class InMemoryTaskManager implements TaskManager {
         return epic;
     }
 
-
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
-
 
     @Override
     public void updateTask(Task task) {
@@ -168,7 +164,6 @@ public class InMemoryTaskManager implements TaskManager {
             getHistory().remove(id);
         }
     }
-
 
     @Override
     public List<Subtask> getSubtasksByEpicId(int epicId) {
