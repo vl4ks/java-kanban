@@ -10,12 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest {
     private InMemoryTaskManager taskManager;
-    private InMemoryHistoryManager historyManager;
 
     @BeforeEach
     void setUp() {
-        historyManager = new InMemoryHistoryManager();
-        taskManager = new InMemoryTaskManager(historyManager);
+        taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
     }
 
     @Test
@@ -32,24 +30,24 @@ public class InMemoryTaskManagerTest {
         taskManager.getTaskById(task2.getId());
         taskManager.getTaskById(task3.getId());
 
-        List<Task> history = historyManager.getHistory();
+        List<Task> history = taskManager.getHistory();
         assertTrue(history.contains(task1));
         assertTrue(history.contains(task2));
         assertTrue(history.contains(task3));
 
         taskManager.deleteTaskById(task1.getId());
-        history = historyManager.getHistory();
+        history = taskManager.getHistory();
         assertEquals(2, history.size());
         assertTrue(history.contains(task2));
         assertTrue(history.contains(task3));
 
         taskManager.deleteTaskById(task2.getId());
-        history = historyManager.getHistory();
+        history = taskManager.getHistory();
         assertEquals(1, history.size());
         assertTrue(history.contains(task3));
 
         taskManager.deleteTaskById(task3.getId());
-        history = historyManager.getHistory();
+        history = taskManager.getHistory();
         assertTrue(history.isEmpty());
     }
 
