@@ -1,20 +1,15 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
-
 import taskmanagement.task.*;
 import taskmanagement.taskmanager.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
-
 public class InMemoryTaskManagerTest {
-    private TaskManager taskManager;
+    private InMemoryTaskManager taskManager;
 
     @BeforeEach
     void setUp() {
@@ -23,9 +18,6 @@ public class InMemoryTaskManagerTest {
 
     @Test
     void testCreateTasksAndRemove() {
-        InMemoryHistoryManager historyManager = mock(InMemoryHistoryManager.class);
-        InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
-
         Task task1 = new Task("Задача1", "Описание", TaskStatus.NEW);
         Task task2 = new Task("Задача2", "Описание", TaskStatus.NEW);
         Task task3 = new Task("Задача3", "Описание", TaskStatus.NEW);
@@ -33,24 +25,30 @@ public class InMemoryTaskManagerTest {
         taskManager.createTask(task1);
         taskManager.createTask(task2);
         taskManager.createTask(task3);
-        taskManager.getTaskById(1);
-        taskManager.getTaskById(2);
-        taskManager.getTaskById(3);
 
-        when(historyManager.getHistory()).thenReturn(Arrays.asList(task1, task2, task3));
+        taskManager.getTaskById(task1.getId());
+        taskManager.getTaskById(task2.getId());
+        taskManager.getTaskById(task3.getId());
 
-        taskManager.deleteTaskById(1);
+        List<Task> history = taskManager.getHistory();
+        assertTrue(history.contains(task1));
+        assertTrue(history.contains(task2));
+        assertTrue(history.contains(task3));
 
-        verify(historyManager).remove(task1.getId());
+        taskManager.deleteTaskById(task1.getId());
+        history = taskManager.getHistory();
+        assertEquals(2, history.size());
+        assertTrue(history.contains(task2));
+        assertTrue(history.contains(task3));
 
-        taskManager.deleteTaskById(2);
+        taskManager.deleteTaskById(task2.getId());
+        history = taskManager.getHistory();
+        assertEquals(1, history.size());
+        assertTrue(history.contains(task3));
 
-        verify(historyManager).remove(task2.getId());
-
-        taskManager.deleteTaskById(3);
-
-        verify(historyManager).remove(task3.getId());
-
+        taskManager.deleteTaskById(task3.getId());
+        history = taskManager.getHistory();
+        assertTrue(history.isEmpty());
     }
 
     @Test
