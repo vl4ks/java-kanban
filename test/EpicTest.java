@@ -1,8 +1,10 @@
 import org.junit.jupiter.api.Test;
-
 import taskmanagement.task.Epic;
 import taskmanagement.task.Subtask;
 import taskmanagement.task.TaskStatus;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +25,7 @@ class EpicTest {
         Epic epic = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.IN_PROGRESS);
         epic.setId(1);
 
-        Subtask subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, 1);
+        Subtask subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, 1, Duration.ofMinutes(15), LocalDateTime.now());
         subtask.setId(2);
         epic.addSubtask(subtask.getId());
 
@@ -37,7 +39,7 @@ class EpicTest {
     @Test
     void testEpicAddSubtask() {
         Epic epic = new Epic("Эпик", "Описание эпика", TaskStatus.NEW);
-        Subtask subtask = new Subtask("Подзадача", "Описание подзадачи", TaskStatus.NEW, 1);
+        Subtask subtask = new Subtask("Подзадача", "Описание подзадачи", TaskStatus.NEW, 1, Duration.ofMinutes(15), LocalDateTime.now());
         epic.addSubtask(subtask.getId());
         assertTrue(epic.getSubtasks().contains(subtask.getId()));
     }

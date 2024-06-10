@@ -1,20 +1,20 @@
 import org.junit.jupiter.api.Test;
-
-
 import taskmanagement.task.Task;
 import taskmanagement.task.TaskStatus;
-import taskmanagement.taskmanager.*;
+import taskmanagement.taskmanager.InMemoryHistoryManager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryHistoryManagerTest {
 
     @Test
     void testAdd() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW);
-        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW);
+        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now().plusHours(1));
 
         historyManager.add(task1);
         historyManager.add(task2);
@@ -27,8 +27,8 @@ class InMemoryHistoryManagerTest {
     @Test
     void testAddDuplicate() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW);
-        Task task2 = new Task(1, "Задача1", "Описание", TaskStatus.NEW);
+        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task2 = new Task(1, "Задача1", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
 
         historyManager.add(task1);
         historyManager.add(task2);
@@ -40,9 +40,9 @@ class InMemoryHistoryManagerTest {
     @Test
     void testRemoveFirst() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW);
-        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW);
-        Task task3 = new Task(3, "Задача3", "Описание", TaskStatus.NEW);
+        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task3 = new Task(3, "Задача3", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
 
         historyManager.add(task1);
         historyManager.add(task2);
@@ -58,9 +58,9 @@ class InMemoryHistoryManagerTest {
     @Test
     void testRemoveMiddle() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW);
-        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW);
-        Task task3 = new Task(3, "Задача3", "Описание", TaskStatus.NEW);
+        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task3 = new Task(3, "Задача3", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
 
         historyManager.add(task1);
         historyManager.add(task2);
@@ -76,9 +76,9 @@ class InMemoryHistoryManagerTest {
     @Test
     void testRemoveLast() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW);
-        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW);
-        Task task3 = new Task(3, "Задача3", "Описание", TaskStatus.NEW);
+        Task task1 = new Task(1, "Задача1", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task2 = new Task(2, "Задача2", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Task task3 = new Task(3, "Задача3", "Описание", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
 
         historyManager.add(task1);
         historyManager.add(task2);

@@ -1,5 +1,11 @@
-import taskmanagement.task.*;
+import taskmanagement.task.Epic;
+import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
+import taskmanagement.task.TaskStatus;
 import taskmanagement.taskmanager.*;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 public class Main {
@@ -17,16 +23,16 @@ public class Main {
         taskManager.createEpic(epic1);
         taskManager.createEpic(epic2);
 
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId());
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId());
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic1.getId());
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId(), Duration.ofMinutes(15), LocalDateTime.now());
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId(), Duration.ofMinutes(15), LocalDateTime.now());
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic1.getId(), Duration.ofMinutes(15), LocalDateTime.now());
 
         taskManager.createTask(task1);
         taskManager.createTask(task2);
 
-        taskManager.createSubtask(subtask1);
-        taskManager.createSubtask(subtask2);
-        taskManager.createSubtask(subtask3);
+//        taskManager.createSubtask(subtask1);
+//        taskManager.createSubtask(subtask2);
+//        taskManager.createSubtask(subtask3);
 
         System.out.println("Запрос 1:");
         System.out.println(taskManager.getTaskById(task1.getId()));

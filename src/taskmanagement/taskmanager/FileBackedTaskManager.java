@@ -1,21 +1,27 @@
 package taskmanagement.taskmanager;
 
-import taskmanagement.task.*;
+import taskmanagement.task.Epic;
+import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
+import taskmanagement.task.TaskType;
 
 import java.io.*;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private File saveFile;
+    private final File saveFile;
 
     public FileBackedTaskManager(HistoryManager historyManager, File saveFile) {
         super(historyManager);
         this.saveFile = saveFile;
+        this.prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
     }
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile))) {
-            writer.write("id,type,name,status,description,epic");
+            writer.write("id,type,name,status,description,epic,duration,startTime");
             writer.newLine();
 
             for (Task task : tasks.values()) {
@@ -32,7 +38,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
         } catch (IOException e) {
-            throw new ManagerSaveException("Произошла ошибка во время записи файла.");
+            throw new ManagerIOException("Произошла ошибка во время записи файла.");
         }
     }
 
@@ -43,7 +49,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             taskManager = new FileBackedTaskManager(historyManager, saveFile);
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.equals("id,type,name,status,description,epic")) {
+                if (line.equals("id,type,name,status,description,epic,duration,startTime")) {
                     continue;
                 }
                 Task task = ConvertTaskUtil.csvToTask(line);
@@ -51,7 +57,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     taskManager.epics.put(task.getId(), (Epic) task);
                 } else if (task.getType() == TaskType.SUBTASK) {
                     Subtask subtask = (Subtask) task;
-                    taskManager.subtasks.put(task.getId(), subtask);
+                    subtasks.put(task.getId(), subtask);
                     Epic epic = taskManager.epics.get(subtask.getEpicId());
                     if (epic != null) {
                         epic.addSubtask(subtask.getId());
@@ -59,6 +65,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 } else {
                     taskManager.tasks.put(task.getId(), task);
                 }
+
+                taskManager.prioritizedTasks.clear();
+                taskManager.prioritizedTasks.addAll(taskManager.getPrioritizedTasks());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,6 +77,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public void createTask(Task task) {
+        if (isIntersection(task)) {
+            throw new ValidationException("Пересечение задач");
+        }
         super.createTask(task);
         save();
     }
@@ -80,12 +92,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public void createSubtask(Subtask subtask) {
+        if (isIntersection(subtask)) {
+            throw new ValidationException("Пересечение задач");
+        }
         super.createSubtask(subtask);
         save();
     }
 
     @Override
     public void updateTask(Task task) {
+        if (isIntersection(task)) {
+            throw new ValidationException("Пересечение задач");
+        }
         super.updateTask(task);
         save();
     }
