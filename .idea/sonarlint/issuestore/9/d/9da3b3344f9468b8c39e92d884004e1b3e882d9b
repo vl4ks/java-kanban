@@ -1,0 +1,5 @@
+
+„
+java:S1192s"bDefine a constant instead of duplicating this literal "ĞŸĞµÑ€ĞµÑĞµÑ‡ĞµĞ½Ğ¸Ğµ Ğ·Ğ°Ğ´Ğ°Ñ‡" 3 times.(‘Ÿ™úÿÿÿÿÿ8è‹µãÿ1
+p
+java:S6204"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹8…µãÿ1
