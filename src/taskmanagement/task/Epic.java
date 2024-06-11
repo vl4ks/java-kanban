@@ -1,18 +1,20 @@
 package taskmanagement.task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
+    private final List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
 
-    public Epic(String title, String description, TaskStatus status) {
-        this(0, title, description, status);
+    public Epic(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        super(id, title, description, status, duration, startTime);
     }
 
-    public Epic(int id, String title, String description, TaskStatus status) {
-        super(id, title, description, status);
+    public Epic(String title, String description, TaskStatus status) {
+        this(0, title, description, status, Duration.ZERO, null);
     }
 
     @Override
@@ -22,6 +24,26 @@ public class Epic extends Task {
 
     public List<Integer> getSubtasks() {
         return subtasks;
+    }
+
+    @Override
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    @Override
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public TaskStatus getStatus() {
+        return status;
     }
 
     public void addSubtask(int subtaskId) {

@@ -1,17 +1,43 @@
 package taskmanagement.task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
     private int epicId; //Идентификатор эпика, к которому принадлежит подзадача
 
-    public Subtask(String title, String description, TaskStatus status, int epicId) {
-        this(0, title, description, status, epicId);
+    public Subtask(int id, String title, String description, TaskStatus status, int epicId, Duration duration, LocalDateTime startTime) {
+        super(id, title, description, status, duration, startTime);
         this.epicId = epicId;
     }
 
-    public Subtask(int id, String title, String description, TaskStatus status, int epicId) {
-        super(id, title, description, status);
+    public Subtask(String title, String description, TaskStatus status, int epicId, Duration duration, LocalDateTime startTime) {
+        this(0, title, description, status, epicId, duration, startTime);
+    }
+
+    public Subtask(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        super(id, title, description, status, duration, startTime);
+    }
+
+
+    public void setEpicId(Integer epicId) {
+        this.epicId = epicId;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    @Override
+    public Duration getDuration() {
+        return duration;
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
     @Override
