@@ -27,7 +27,7 @@ public class Subtask extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
-        return endTime;
+        return this.startTime.plus(duration);
     }
 
     @Override

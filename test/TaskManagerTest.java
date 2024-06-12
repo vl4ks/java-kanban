@@ -11,6 +11,7 @@ import taskmanagement.taskmanager.ValidationException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,12 +59,12 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Эпик", "Описание эпика", TaskStatus.NEW);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Subtask subtask1 = new Subtask("Подзадача1", "Описание", TaskStatus.NEW, 1, Duration.ofMinutes(15), LocalDateTime.of(2024, 4, 5, 11, 30));
-        Subtask subtask2 = new Subtask("Подзадача2", "Описание", TaskStatus.NEW, 1, Duration.ofMinutes(30), LocalDateTime.of(2024, 4, 5, 11, 50));
+        Subtask subtask2 = new Subtask("Подзадача2", "Описание", TaskStatus.NEW, 1, Duration.ofMinutes(30), LocalDateTime.of(2024, 4, 5, 11, 45));
         taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         assertEquals(LocalDateTime.of(2024, 4, 5, 11, 30).format(formatter), epic.getStartTime().format(formatter));
-        assertEquals(LocalDateTime.of(2024, 4, 5, 12, 20).format(formatter), epic.getEndTime().format(formatter));
+        assertEquals(LocalDateTime.of(2024, 4, 5, 12, 15).format(formatter), epic.getEndTime().format(formatter));
         assertEquals(Duration.ofMinutes(45), epic.getDuration());
     }
 
@@ -97,6 +98,27 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(TaskStatus.DONE, epic.getStatus());
     }
 
+    @Test
+    void testPrioritizedTasksSorting() {
+        Task task1 = new Task("Задача 1", "Описание", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 6, 11, 9, 0));
+        Task task2 = new Task("Задача 2", "Описание", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 6, 11, 10, 0));
+        Epic epic = new Epic("Эпик 1", "Описание", TaskStatus.NEW);
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 6, 11, 8, 0));
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 6, 11, 11, 0));
+
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
+        taskManager.createEpic(epic);
+        taskManager.createSubtask(subtask1);
+        taskManager.createSubtask(subtask2);
+
+        List<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
+
+        assertEquals(subtask1, prioritizedTasks.get(0), "Подзадача 1 должна быть первой");
+        assertEquals(task1, prioritizedTasks.get(1), "Задача 1 должна быть второй");
+        assertEquals(task2, prioritizedTasks.get(2), "Задача 2 должна быть третьей");
+        assertEquals(subtask2, prioritizedTasks.get(3), "Подзадача 2 должна быть четвертой");
+    }
 
     @Test
     void testUpdateTask() {

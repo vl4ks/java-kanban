@@ -48,6 +48,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             HistoryManager historyManager = new InMemoryHistoryManager();
             taskManager = new FileBackedTaskManager(historyManager, saveFile);
             String line;
+
+            taskManager.prioritizedTasks.clear();
             while ((line = reader.readLine()) != null) {
                 if (line.equals("id,type,name,status,description,epic,duration,startTime")) {
                     continue;
@@ -57,17 +59,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     taskManager.epics.put(task.getId(), (Epic) task);
                 } else if (task.getType() == TaskType.SUBTASK) {
                     Subtask subtask = (Subtask) task;
-                    subtasks.put(task.getId(), subtask);
+                    taskManager.subtasks.put(task.getId(), subtask);
                     Epic epic = taskManager.epics.get(subtask.getEpicId());
                     if (epic != null) {
                         epic.addSubtask(subtask.getId());
                     }
+                    taskManager.prioritizedTasks.add(subtask);
                 } else {
                     taskManager.tasks.put(task.getId(), task);
+                    taskManager.prioritizedTasks.add(task);
                 }
-
-                taskManager.prioritizedTasks.clear();
-                taskManager.prioritizedTasks.addAll(taskManager.getPrioritizedTasks());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,9 +78,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public void createTask(Task task) {
-        if (isIntersection(task)) {
-            throw new ValidationException("Пересечение задач");
-        }
         super.createTask(task);
         save();
     }
@@ -92,18 +90,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public void createSubtask(Subtask subtask) {
-        if (isIntersection(subtask)) {
-            throw new ValidationException("Пересечение задач");
-        }
         super.createSubtask(subtask);
         save();
     }
 
     @Override
     public void updateTask(Task task) {
-        if (isIntersection(task)) {
-            throw new ValidationException("Пересечение задач");
-        }
         super.updateTask(task);
         save();
     }

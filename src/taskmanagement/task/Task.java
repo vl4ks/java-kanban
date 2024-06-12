@@ -12,7 +12,6 @@ public class Task {
 
     protected Duration duration;
     protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
 
 
     public Task(String title, String description, TaskStatus status) {
@@ -26,9 +25,6 @@ public class Task {
         this.id = id;
         this.duration = duration;
         this.startTime = startTime;
-        if (this.startTime != null) {
-            this.endTime = this.startTime.plus(duration);
-        }
     }
 
     public Task(String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
@@ -44,11 +40,11 @@ public class Task {
     }
 
     public void setEndTime(LocalDateTime endTime) {
-        this.endTime = startTime.plus(this.duration);
+        endTime = startTime.plus(this.duration);
     }
 
     public LocalDateTime getEndTime() {
-        return endTime;
+        return this.startTime.plus(duration);
     }
 
     public void setStartTime(LocalDateTime startTime) {

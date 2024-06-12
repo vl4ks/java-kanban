@@ -7,6 +7,8 @@ import taskmanagement.task.Task;
 import java.util.List;
 
 public interface TaskManager {
+    List<Task> getPrioritizedTasks();
+
     List<Epic> getAllEpics();
 
     //удаление всех эпиков
