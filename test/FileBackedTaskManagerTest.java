@@ -75,12 +75,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         taskManager.createSubtask(subtask2);
 
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(saveFile);
-
-        List<Task> prioritizedTasks = loadedManager.getPrioritizedTasks();
-
-        assertEquals(subtask1, prioritizedTasks.get(0), "Подзадача 1 должна быть первой");
-        assertEquals(task1, prioritizedTasks.get(1), "Задача 1 должна быть второй");
-        assertEquals(task2, prioritizedTasks.get(2), "Задача 2 должна быть третьей");
-        assertEquals(subtask2, prioritizedTasks.get(3), "Подзадача 2 должна быть четвертой");
+        assertEquals(taskManager.getPrioritizedTasks(), loadedManager.getPrioritizedTasks(), "Отсортированные списки не совпадают");
     }
 }

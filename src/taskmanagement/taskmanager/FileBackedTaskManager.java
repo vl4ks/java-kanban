@@ -49,7 +49,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             taskManager = new FileBackedTaskManager(historyManager, saveFile);
             String line;
 
-            taskManager.prioritizedTasks.clear();
             while ((line = reader.readLine()) != null) {
                 if (line.equals("id,type,name,status,description,epic,duration,startTime")) {
                     continue;

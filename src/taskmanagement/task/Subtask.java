@@ -16,28 +16,8 @@ public class Subtask extends Task {
         this(0, title, description, status, epicId, duration, startTime);
     }
 
-    public Subtask(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
-        super(id, title, description, status, duration, startTime);
-    }
-
-
     public void setEpicId(Integer epicId) {
         this.epicId = epicId;
-    }
-
-    @Override
-    public LocalDateTime getEndTime() {
-        return this.startTime.plus(duration);
-    }
-
-    @Override
-    public Duration getDuration() {
-        return duration;
-    }
-
-    @Override
-    public LocalDateTime getStartTime() {
-        return startTime;
     }
 
     @Override
