@@ -1,21 +1,27 @@
 package taskmanagement.taskmanager;
 
-import taskmanagement.task.*;
+import taskmanagement.task.Epic;
+import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
+import taskmanagement.task.TaskType;
 
 import java.io.*;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private File saveFile;
+    private final File saveFile;
 
     public FileBackedTaskManager(HistoryManager historyManager, File saveFile) {
         super(historyManager);
         this.saveFile = saveFile;
+        this.prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
     }
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile))) {
-            writer.write("id,type,name,status,description,epic");
+            writer.write("id,type,name,status,description,epic,duration,startTime");
             writer.newLine();
 
             for (Task task : tasks.values()) {
@@ -32,7 +38,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
         } catch (IOException e) {
-            throw new ManagerSaveException("Произошла ошибка во время записи файла.");
+            throw new ManagerIOException("Произошла ошибка во время записи файла.");
         }
     }
 
@@ -42,8 +48,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             HistoryManager historyManager = new InMemoryHistoryManager();
             taskManager = new FileBackedTaskManager(historyManager, saveFile);
             String line;
+
             while ((line = reader.readLine()) != null) {
-                if (line.equals("id,type,name,status,description,epic")) {
+                if (line.equals("id,type,name,status,description,epic,duration,startTime")) {
                     continue;
                 }
                 Task task = ConvertTaskUtil.csvToTask(line);
@@ -56,8 +63,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     if (epic != null) {
                         epic.addSubtask(subtask.getId());
                     }
+                    taskManager.prioritizedTasks.add(subtask);
                 } else {
                     taskManager.tasks.put(task.getId(), task);
+                    taskManager.prioritizedTasks.add(task);
                 }
             }
         } catch (IOException e) {

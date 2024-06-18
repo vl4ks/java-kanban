@@ -1,19 +1,24 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import taskmanagement.task.*;
-import taskmanagement.taskmanager.*;
+import taskmanagement.task.Epic;
+import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
+import taskmanagement.task.TaskStatus;
+import taskmanagement.taskmanager.FileBackedTaskManager;
+import taskmanagement.taskmanager.InMemoryHistoryManager;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class FileBackedTaskManagerTest {
-    private static File saveFile;
-    private static FileBackedTaskManager fileBackedTaskManager;
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
-    @BeforeEach
-    void setUp() {
+    File saveFile;
+
+    {
         try {
             saveFile = File.createTempFile("task_manager_test", ".csv");
         } catch (Exception e) {
@@ -21,11 +26,15 @@ class FileBackedTaskManagerTest {
         }
     }
 
+    @Override
+    protected FileBackedTaskManager createTaskManager() {
+        return new FileBackedTaskManager(new InMemoryHistoryManager(), saveFile);
+    }
+
     //Сохранение и загрузка пустого файла
     @Test
     void testSaveAndLoadEmptyFile() {
         assertTrue(saveFile.exists(), "Файл не был создан");
-
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(saveFile);
 
         assertTrue(loadedManager.getAllTasks().isEmpty(), "Список задач не пуст");
@@ -36,20 +45,36 @@ class FileBackedTaskManagerTest {
     //Сохранение и загрузка нескольких задач
     @Test
     void testSaveAndLoadTasks() {
-        fileBackedTaskManager = new FileBackedTaskManager(new InMemoryHistoryManager(), saveFile);
+        Task task = new Task("Задача файлового менеджера", "Описание задачи", TaskStatus.NEW, Duration.ofMinutes(15), LocalDateTime.now());
+        Epic epic = new Epic("Эпик файлового менеджера", "Описание эпика", TaskStatus.NEW);
+        taskManager.createEpic(epic);
+        taskManager.createTask(task);
+        Subtask subtask = new Subtask("Подзадача файлового менеджера", "Описание подзадачи", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.now().plusHours(1));
 
-        Task task = new Task("Задача 1", "Описание 1", TaskStatus.NEW);
-        Epic epic = new Epic("Эпик 1", "Описание 1", TaskStatus.NEW);
-        Subtask subtask = new Subtask("Подзадача 1", "Описание 1", TaskStatus.NEW, epic.getId());
-
-        fileBackedTaskManager.createTask(task);
-        fileBackedTaskManager.createEpic(epic);
-        fileBackedTaskManager.createSubtask(subtask);
+        taskManager.createSubtask(subtask);
 
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(saveFile);
 
-        assertEquals(fileBackedTaskManager.getAllTasks(), loadedManager.getAllTasks(), "Списки задач не совпадают");
-        assertEquals(fileBackedTaskManager.getAllEpics(), loadedManager.getAllEpics(), "Списки эпиков не совпадают");
-        assertEquals(fileBackedTaskManager.getAllSubtasks(), loadedManager.getAllSubtasks(), "Списки подзадач не совпадают");
+        assertEquals(taskManager.getAllTasks(), loadedManager.getAllTasks(), "Списки задач не совпадают");
+        assertEquals(taskManager.getAllEpics(), loadedManager.getAllEpics(), "Списки эпиков не совпадают");
+        assertEquals(taskManager.getAllSubtasks(), loadedManager.getAllSubtasks(), "Списки подзадач не совпадают");
+    }
+
+    @Test
+    void testSaveAndLoadPrioritizedTasks() {
+        Task task1 = new Task("Задача 1", "Описание", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 6, 11, 9, 0));
+        Task task2 = new Task("Задача 2", "Описание", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 6, 11, 10, 0));
+        Epic epic = new Epic("Эпик 1", "Описание", TaskStatus.NEW);
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 6, 11, 8, 0));
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 6, 11, 11, 0));
+
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
+        taskManager.createEpic(epic);
+        taskManager.createSubtask(subtask1);
+        taskManager.createSubtask(subtask2);
+
+        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(saveFile);
+        assertEquals(taskManager.getPrioritizedTasks(), loadedManager.getPrioritizedTasks(), "Отсортированные списки не совпадают");
     }
 }

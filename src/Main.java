@@ -1,5 +1,11 @@
-import taskmanagement.task.*;
+import taskmanagement.task.Epic;
+import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
+import taskmanagement.task.TaskStatus;
 import taskmanagement.taskmanager.*;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 public class Main {
@@ -8,8 +14,8 @@ public class Main {
 
         TaskManager taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
 
-        Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW);
-        Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS);
+        Task task1 = new Task("Задача 1", "Описание задачи 1", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 4, 6, 10, 00));
+        Task task2 = new Task("Задача 2", "Описание задачи 2", TaskStatus.IN_PROGRESS, Duration.ofMinutes(15), LocalDateTime.of(2024, 4, 6, 11, 00));
 
         Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", TaskStatus.NEW);
         Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", TaskStatus.DONE);
@@ -17,9 +23,9 @@ public class Main {
         taskManager.createEpic(epic1);
         taskManager.createEpic(epic2);
 
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId());
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId());
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic1.getId());
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", TaskStatus.NEW, epic1.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 4, 6, 12, 00));
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", TaskStatus.IN_PROGRESS, epic1.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 4, 6, 12, 30));
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", TaskStatus.DONE, epic1.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 4, 6, 13, 00));
 
         taskManager.createTask(task1);
         taskManager.createTask(task2);
