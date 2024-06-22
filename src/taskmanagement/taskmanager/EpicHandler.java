@@ -1,7 +1,6 @@
 package taskmanagement.taskmanager;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import taskmanagement.task.Epic;
 import taskmanagement.task.Subtask;
