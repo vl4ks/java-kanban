@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
-    private int id;
+    private Integer id;
     protected String title;
     protected String description;
     protected TaskStatus status;
@@ -44,6 +44,9 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
+        if (this.startTime == null || this.duration == null) {
+            return null;
+        }
         return this.startTime.plus(duration);
     }
 
@@ -59,7 +62,7 @@ public class Task {
         return TaskType.TASK;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

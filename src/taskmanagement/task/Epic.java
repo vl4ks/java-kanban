@@ -4,10 +4,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Epic extends Task {
-    private final List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
+    private List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
     protected LocalDateTime endTime;
 
     public Epic(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
@@ -30,6 +32,10 @@ public class Epic extends Task {
 
     public List<Integer> getSubtasks() {
         return subtasks;
+    }
+
+    public void setSubtasks(List<Integer> subtasks) {
+        this.subtasks = subtasks == null ? new ArrayList<>() : subtasks;
     }
 
     @Override
