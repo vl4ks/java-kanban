@@ -17,17 +17,19 @@ public class HistoryHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        try {
-            if ("GET".equals(method)) {
-                handleGet(exchange);
-            } else {
-                System.out.println("Неправильный метод");
-                exchange.sendResponseHeaders(405, -1);
+        try (exchange) {
+            String method = exchange.getRequestMethod();
+            try {
+                if ("GET".equals(method)) {
+                    handleGet(exchange);
+                } else {
+                    System.out.println("Неправильный метод");
+                    exchange.sendResponseHeaders(405, -1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                handleException(exchange, e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            handleException(exchange, e);
         }
     }
 

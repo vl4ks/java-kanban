@@ -21,24 +21,27 @@ public class SubtaskHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String path = exchange.getRequestURI().getPath();
-        try {
-            if ("GET".equals(method)) {
-                handleGetSubtask(exchange, path);
-            } else if ("POST".equals(method)) {
-                handlePostSubtask(exchange, path);
-            } else if ("DELETE".equals(method)) {
-                handleDeleteSubtask(exchange, path);
-            } else {
-                System.out.println("Неправильный метод");
-                exchange.sendResponseHeaders(405, -1);
+        try (exchange) {
+            String method = exchange.getRequestMethod();
+            String path = exchange.getRequestURI().getPath();
+            try {
+                if ("GET".equals(method)) {
+                    handleGetSubtask(exchange, path);
+                } else if ("POST".equals(method)) {
+                    handlePostSubtask(exchange, path);
+                } else if ("DELETE".equals(method)) {
+                    handleDeleteSubtask(exchange, path);
+                } else {
+                    System.out.println("Неправильный метод");
+                    exchange.sendResponseHeaders(405, -1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                handleException(exchange, e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            handleException(exchange, e);
         }
     }
+
 
     private void handleGetSubtask(HttpExchange exchange, String path) throws IOException {
         if (path.equals("/subtasks")) {

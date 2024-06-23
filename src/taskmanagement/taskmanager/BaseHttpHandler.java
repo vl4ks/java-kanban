@@ -27,19 +27,15 @@ abstract class BaseHttpHandler implements HttpHandler {
 
         long contentLength = (statusCode == 204 || responseBytes.length == 0) ? -1 : responseBytes.length;
 
-        try {
-            exchange.sendResponseHeaders(statusCode, contentLength);
+        exchange.sendResponseHeaders(statusCode, contentLength);
 
-            if (contentLength > 0) {
-                try (OutputStream os = exchange.getResponseBody()) {
-                    os.write(responseBytes);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            exchange.close();
+        if (contentLength > 0) {
+            OutputStream os = exchange.getResponseBody();
+            os.write(responseBytes);
+            os.close();
         }
+
+        exchange.close();
     }
 
 
@@ -57,7 +53,6 @@ abstract class BaseHttpHandler implements HttpHandler {
 
     protected void handleException(HttpExchange exchange, Exception e) throws IOException {
         e.printStackTrace();
-
         try {
             if (!exchange.getResponseHeaders().containsKey("Content-Type")) {
                 if (e instanceof ManagerIOException) {

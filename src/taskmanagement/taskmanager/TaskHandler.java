@@ -18,26 +18,29 @@ class TaskHandler extends BaseHttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String path = exchange.getRequestURI().getPath();
-        System.out.println("Received request: " + method + " " + path);
+        try (exchange) {
+            String method = exchange.getRequestMethod();
+            String path = exchange.getRequestURI().getPath();
+            System.out.println("Received request: " + method + " " + path);
 
-        try {
-            if ("GET".equals(method)) {
-                handleGetTask(exchange, path);
-            } else if ("POST".equals(method)) {
-                handlePostTask(exchange, path);
-            } else if ("DELETE".equals(method)) {
-                handleDeleteTask(exchange, path);
-            } else {
-                System.out.println("Неправильный метод");
-                exchange.sendResponseHeaders(405, -1);
+            try {
+                if ("GET".equals(method)) {
+                    handleGetTask(exchange, path);
+                } else if ("POST".equals(method)) {
+                    handlePostTask(exchange, path);
+                } else if ("DELETE".equals(method)) {
+                    handleDeleteTask(exchange, path);
+                } else {
+                    System.out.println("Неправильный метод");
+                    exchange.sendResponseHeaders(405, -1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                handleException(exchange, e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            handleException(exchange, e);
         }
     }
+
 
     private void handleGetTask(HttpExchange exchange, String path) throws IOException {
         if (path.equals("/tasks")) {

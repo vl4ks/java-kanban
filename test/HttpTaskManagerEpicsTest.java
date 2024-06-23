@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
@@ -40,23 +39,22 @@ public class HttpTaskManagerEpicsTest {
         taskServer.stop();
     }
 
-
     @Test
     public void testAddEpic() throws IOException, InterruptedException {
-        Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
-        String epicJson = gson.toJson(epic);
-
-        HttpClient client = HttpClient.newBuilder()
-                .version(Version.HTTP_1_1)
-                .build();
-        URI url = URI.create("http://localhost:8080/epics");
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(url)
-                .POST(HttpRequest.BodyPublishers.ofString(epicJson))
-                .header("Content-Type", "application/json")
-                .build();
-
         try {
+            Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
+            String epicJson = gson.toJson(epic);
+
+            HttpClient client = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .build();
+            URI url = URI.create("http://localhost:8080/epics");
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(url)
+                    .POST(HttpRequest.BodyPublishers.ofString(epicJson))
+                    .header("Content-Type", "application/json")
+                    .build();
+
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Response status code: " + response.statusCode());
             System.out.println("Response body: " + response.body());
