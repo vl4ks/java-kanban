@@ -12,10 +12,12 @@ public class Epic extends Task {
 
     public Epic(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
         super(id, title, description, status, duration, startTime);
+        this.subtasks = new ArrayList<>();
     }
 
     public Epic(String title, String description, TaskStatus status) {
         this(0, title, description, status, Duration.ZERO, null);
+        this.subtasks = new ArrayList<>();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Epic extends Task {
     }
 
     public void setSubtasks(List<Integer> subtasks) {
-        this.subtasks = subtasks == null ? new ArrayList<>() : subtasks;
+        this.subtasks = subtasks;
     }
 
     @Override

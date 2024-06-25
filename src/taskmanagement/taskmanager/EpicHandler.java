@@ -76,27 +76,39 @@ public class EpicHandler extends BaseHttpHandler {
         }
     }
 
-
     private void handlePostEpic(HttpExchange exchange, String path) throws IOException {
-        if (path.matches("/epics")) {
+        if (path.matches("/epics(/\\d+)?")) {
             String body = readRequestBody(exchange);
             try {
                 Epic epic = gson.fromJson(body, Epic.class);
-                if (epic == null || epic.getId() == null) {
-                    sendResponse(exchange, "Некорректный JSON формат или отсутствует id", 400);
+                if (epic == null) {
+                    sendResponse(exchange, "Некорректный JSON формат", 400);
                     return;
                 }
 
-                try {
-                    Task existingEpic = manager.getEpicById(epic.getId());
-                    if (existingEpic != null) {
-                        sendResponse(exchange, gson.toJson(existingEpic), 406);
+                if (path.matches("/epics/\\d+")) {
+                    // Обновление существующего эпика
+                    int epicId = parseIdFromPath(path);
+                    if (epic.getId() == 0 || epic.getId() != epicId) {
+                        sendResponse(exchange, "Неверный id", 400);
                         return;
                     }
-                } catch (NotFoundException ignored) {
+
+                    try {
+                        manager.updateTask(epic);
+                        sendResponse(exchange, "Эпик обновлен", 200);
+                    } catch (NotFoundException e) {
+                        sendResponse(exchange, "Эпик с таким id не найден", 404);
+                    }
+                } else {
+                    // Создание нового эпика
+                    if (epic.getId() != 0) {
+                        sendResponse(exchange, "Неверный id(для нового эпика id = 0)", 400);
+                        return;
+                    }
+                    manager.createEpic(epic);
+                    sendResponse(exchange, "Эпик создан", 201);
                 }
-                manager.createEpic(epic);
-                sendResponse(exchange, "Эпик создан", 201);
             } catch (JsonSyntaxException e) {
                 sendError(exchange, 400, "Некорректный JSON формат: " + e.getMessage());
             } catch (NullPointerException e) {
@@ -119,6 +131,9 @@ public class EpicHandler extends BaseHttpHandler {
             } else {
                 sendNotFound(exchange);
             }
+        } else if (path.equals("/epics")) {
+            manager.removeAllEpics();
+            sendResponse(exchange, "Эпики удалены", 200);
         } else {
             sendResponse(exchange, "Эндпоинт не найден", 404);
         }

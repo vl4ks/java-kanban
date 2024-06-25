@@ -85,7 +85,6 @@ public class SubtaskHandler extends BaseHttpHandler {
                     }
 
                     try {
-                        manager.getSubtaskById(subtaskId);
                         manager.updateTask(subtask);
                         sendResponse(exchange, "Подзадача обновлена", 200);
                     } catch (NotFoundException e) {
@@ -120,6 +119,9 @@ public class SubtaskHandler extends BaseHttpHandler {
             } else {
                 sendResponse(exchange, "Неверный id ", 400);
             }
+        } else if (path.equals("/subtasks")) {
+            manager.removeAllSubtasks();
+            sendResponse(exchange, "Сабтаски удалены", 200);
         } else {
             sendResponse(exchange, "Эндпоинт не найден", 404);
         }

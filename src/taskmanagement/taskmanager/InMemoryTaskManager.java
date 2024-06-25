@@ -130,9 +130,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createEpic(Epic epic) {
-        if (epic.getSubtasks() == null) {
-            epic.setSubtasks(new ArrayList<>()); //// Инициализация пустого списка для успешного выполения запроса POST
-        }
         epic.setId(idCounter++);
         epics.put(epic.getId(), epic);
         calculateEpicFields(epic);

@@ -146,4 +146,25 @@ public class HttpTaskManagerTasksTest {
 
         assertThrows(NotFoundException.class, () -> manager.getTaskById(task.getId()), "Задача не была удалена");
     }
+
+    @Test
+    public void testDeleteAllTasks() throws IOException, InterruptedException {
+        Task task1 = new Task("Task 1", "Testing task 1",
+                TaskStatus.NEW, Duration.ofMinutes(5), LocalDateTime.now());
+        Task task2 = new Task("Task 2", "Testing task 2",
+                TaskStatus.NEW, Duration.ofMinutes(5), LocalDateTime.now().plusHours(1));
+        manager.createTask(task1);
+        manager.createTask(task2);
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create("http://localhost:8080/tasks");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertTrue(manager.getAllTasks().isEmpty());
+    }
 }

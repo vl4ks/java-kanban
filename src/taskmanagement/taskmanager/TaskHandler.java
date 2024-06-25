@@ -77,7 +77,6 @@ class TaskHandler extends BaseHttpHandler {
                     }
 
                     try {
-                        manager.getTaskById(taskId);
                         manager.updateTask(task);
                         sendResponse(exchange, "Задача обновлена", 200);
                     } catch (NotFoundException e) {
@@ -111,6 +110,9 @@ class TaskHandler extends BaseHttpHandler {
             } else {
                 sendResponse(exchange, "Неверный id ", 400);
             }
+        } else if (path.equals("/tasks")) {
+            manager.removeAllTasks();
+            sendResponse(exchange, "Задачи удалены", 200);
         } else {
             sendResponse(exchange, "Эндпоинт не найден", 404);
         }

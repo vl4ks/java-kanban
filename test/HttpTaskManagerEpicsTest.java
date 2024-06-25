@@ -4,11 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import taskmanagement.task.Epic;
 import taskmanagement.task.Subtask;
+import taskmanagement.task.Task;
 import taskmanagement.task.TaskStatus;
 import taskmanagement.taskmanager.*;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -41,31 +41,50 @@ public class HttpTaskManagerEpicsTest {
 
     @Test
     public void testAddEpic() throws IOException, InterruptedException {
-        try {
-            Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
-            String epicJson = gson.toJson(epic);
+        Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
+        String epicJson = gson.toJson(epic);
 
-            HttpClient client = HttpClient.newBuilder()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .build();
-            URI url = URI.create("http://localhost:8080/epics");
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(url)
-                    .POST(HttpRequest.BodyPublishers.ofString(epicJson))
-                    .header("Content-Type", "application/json")
-                    .build();
+        HttpClient client = HttpClient.newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
+                .build();
+        URI url = URI.create("http://localhost:8080/epics");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(epicJson))
+                .header("Content-Type", "application/json")
+                .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("Response status code: " + response.statusCode());
-            System.out.println("Response body: " + response.body());
-            assertEquals(201, response.statusCode());
-        } catch (ConnectException e) {
-            e.printStackTrace();
-            fail("Сервер недоступен: " + e.getMessage());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            fail("Запрос завершился неудачей: " + e.getMessage());
-        }
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(201, response.statusCode());
+    }
+
+    @Test
+    public void testUpdateEpic() throws IOException, InterruptedException {
+        Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
+        manager.createEpic(epic);
+
+        Subtask subtask = new Subtask("Subtask 1", "Testing subtask 1",
+                TaskStatus.NEW, epic.getId(), Duration.ofMinutes(5), LocalDateTime.now());
+        manager.createSubtask(subtask);
+
+        epic.setTitle("Updated Epic 1");
+
+        String epicJson = gson.toJson(epic);
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create("http://localhost:8080/epics/" + epic.getId());
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(epicJson))
+                .header("Content-Type", "application/json")
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(200, response.statusCode());
+
+        Task updatedEpic = manager.getEpicById(epic.getId());
+        assertEquals("Updated Epic 1", updatedEpic.getTitle(), "Эпик не обновлен");
     }
 
     @Test
@@ -149,5 +168,24 @@ public class HttpTaskManagerEpicsTest {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
+    }
+
+    @Test
+    public void testDeleteAllEpics() throws IOException, InterruptedException {
+        Epic epic1 = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
+        Epic epic2 = new Epic("Epic 2", "Testing epic 2", TaskStatus.IN_PROGRESS);
+        manager.createEpic(epic1);
+        manager.createEpic(epic2);
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create("http://localhost:8080/epics");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertTrue(manager.getAllEpics().isEmpty());
     }
 }

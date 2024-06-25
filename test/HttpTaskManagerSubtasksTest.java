@@ -61,6 +61,7 @@ public class HttpTaskManagerSubtasksTest {
         assertEquals(1, subtasksFromManager.size(), "Некорректное количество подзадач");
         assertEquals("Subtask 1", subtasksFromManager.get(0).getTitle(), "Некорректное имя подзадачи");
     }
+
     @Test
     public void testUpdateSubtask() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
@@ -155,5 +156,30 @@ public class HttpTaskManagerSubtasksTest {
         assertEquals(204, response.statusCode());
 
         assertThrows(NotFoundException.class, () -> manager.getTaskById(subtask.getId()), "Подзадача не была удалена");
+    }
+
+    @Test
+    public void testDeleteAllSubtasks() throws IOException, InterruptedException {
+        Epic epic = new Epic("Epic 1", "Testing epic 1", TaskStatus.NEW);
+        manager.createEpic(epic);
+
+        Subtask subtask = new Subtask("Subtask 1", "Testing subtask 1",
+                TaskStatus.NEW, epic.getId(), Duration.ofMinutes(5), LocalDateTime.now());
+        manager.createSubtask(subtask);
+
+        Subtask subtask2 = new Subtask("Subtask 2", "Testing subtask 2",
+                TaskStatus.NEW, epic.getId(), Duration.ofMinutes(5), LocalDateTime.now().plusMinutes(5));
+        manager.createSubtask(subtask2);
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create("http://localhost:8080/subtasks");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertTrue(manager.getAllSubtasks().isEmpty());
     }
 }
