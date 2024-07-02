@@ -7,15 +7,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private final List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
+    private List<Integer> subtasks = new ArrayList<>(); // список подзадач в эпике
     protected LocalDateTime endTime;
 
     public Epic(int id, String title, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
         super(id, title, description, status, duration, startTime);
+        this.subtasks = new ArrayList<>();
     }
 
     public Epic(String title, String description, TaskStatus status) {
         this(0, title, description, status, Duration.ZERO, null);
+        this.subtasks = new ArrayList<>();
     }
 
     @Override
@@ -30,6 +32,10 @@ public class Epic extends Task {
 
     public List<Integer> getSubtasks() {
         return subtasks;
+    }
+
+    public void setSubtasks(List<Integer> subtasks) {
+        this.subtasks = subtasks;
     }
 
     @Override

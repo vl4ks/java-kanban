@@ -102,13 +102,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void testPrioritizedTasksSorting() {
         Task task1 = new Task("Задача 1", "Описание", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 6, 11, 9, 0));
         Task task2 = new Task("Задача 2", "Описание", TaskStatus.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 6, 11, 10, 0));
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
         Epic epic = new Epic("Эпик 1", "Описание", TaskStatus.NEW);
+        taskManager.createEpic(epic);
         Subtask subtask1 = new Subtask("Подзадача 1", "Описание", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 6, 11, 8, 0));
         Subtask subtask2 = new Subtask("Подзадача 2", "Описание", TaskStatus.NEW, epic.getId(), Duration.ofMinutes(15), LocalDateTime.of(2024, 6, 11, 11, 0));
 
-        taskManager.createTask(task1);
-        taskManager.createTask(task2);
-        taskManager.createEpic(epic);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 

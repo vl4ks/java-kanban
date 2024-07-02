@@ -122,6 +122,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         task.setId(idCounter++);
         tasks.put(task.getId(), task);
+        if (task.getId() == null) {
+            throw new NotFoundException("Задача не найдена");
+        }
         prioritizedTasks.add(task);
     }
 
@@ -144,6 +147,8 @@ public class InMemoryTaskManager implements TaskManager {
             epic.addSubtask(subtask.getId());
             updateEpicStatus(epic);
             calculateEpicFields(epic);
+        } else {
+            throw new NotFoundException("Эпик с id=" + subtask.getEpicId() + " не найден.");
         }
         prioritizedTasks.add(subtask);
     }
@@ -273,6 +278,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return epic.getSubtasks().stream()
                 .map(subtaskId -> subtasks.get(subtaskId))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
